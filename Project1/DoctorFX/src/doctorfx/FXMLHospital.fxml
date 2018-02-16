@@ -8,12 +8,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane dividerPositions="0.7" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="618.0" prefWidth="456.0" stylesheets="@../css/hospital-main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="doctorfx.FXMLHospitalController">
+<SplitPane dividerPositions="0.7" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="618.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="doctorfx.FXMLDocumentController">
   <items>
       <GridPane prefHeight="429.0" prefWidth="452.0">
          <children>
-            <ListView fx:id="patientList" onMouseClicked="#patientSelect" prefHeight="379.0" prefWidth="290.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ListView fx:id="doctorList" onMouseClicked="#doctorSelect" prefHeight="330.0" prefWidth="226.0" GridPane.rowIndex="1" />
+            <ListView fx:id="patientList" prefHeight="379.0" prefWidth="290.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ListView fx:id="doctorList" prefHeight="330.0" prefWidth="226.0" GridPane.rowIndex="1" />
             <Label prefHeight="21.0" prefWidth="107.0" text="Doctors">
                <font>
                   <Font size="12.0" />
@@ -40,6 +40,6 @@
             <RowConstraints maxHeight="410.0" minHeight="10.0" prefHeight="361.7734069824219" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
-      <TextArea fx:id="display" editable="false" onMouseClicked="#refocus" prefHeight="200.0" prefWidth="457.0" />
+      <TextArea prefHeight="200.0" prefWidth="457.0" />
   </items>
 </SplitPane>

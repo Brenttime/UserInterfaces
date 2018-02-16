@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.DBProps;
 
 /**
  *
@@ -23,6 +24,11 @@ public class DoctorFX extends Application {
         
         Scene scene = new Scene(root);
         
+        stage.setWidth(500);
+        stage.setHeight(700);
+        
+        stage.setTitle("Doctors & Patients - " + DBProps.which); 
+    
         stage.setScene(scene);
         stage.show();
     }
