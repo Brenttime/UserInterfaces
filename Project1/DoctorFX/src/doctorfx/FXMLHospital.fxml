@@ -36,8 +36,8 @@
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints maxHeight="183.63339233398438" minHeight="0.0" prefHeight="48.226593017578125" vgrow="NEVER" />
-            <RowConstraints maxHeight="410.0" minHeight="10.0" prefHeight="361.7734069824219" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="183.63339233398438" minHeight="0.0" prefHeight="84.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="410.0" minHeight="10.0" prefHeight="344.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
       <TextArea prefHeight="200.0" prefWidth="457.0" />

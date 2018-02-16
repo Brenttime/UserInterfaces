@@ -24,8 +24,8 @@ public class DoctorFX extends Application {
         
         Scene scene = new Scene(root);
         
-        stage.setWidth(500);
-        stage.setHeight(700);
+        stage.setWidth(700);
+        stage.setHeight(500);
         
         stage.setTitle("Doctors & Patients - " + DBProps.which); 
     

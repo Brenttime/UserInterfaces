@@ -4,7 +4,10 @@ import models.Doctor;
 import models.Patient;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.event.Event;
@@ -70,8 +73,9 @@ public class FXMLHospitalController implements Initializable {
             System.out.println("doctorList selection: " + doctor);
             display.setText(Helper.info(doctor));
         }
-        catch(Exception e){
-                
+        catch (Exception ex) {
+          ex.printStackTrace(System.err);
+          System.exit(1);
         }
     }
 
@@ -112,23 +116,35 @@ public class FXMLHospitalController implements Initializable {
       if (lastFocused != null) {
         lastFocused.requestFocus();
       }
+
+    }
+    
+    @FXML
+    private void clear(Event event)
+    {
+        patientTreatmentIds.clear();
+        doctorTreatmentIds.clear();
+        patientList.refresh();
+        doctorList.refresh();
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         try {
             ORM.init(DBProps.getProps());
-
-            Collection<Doctor> doctors = ORM.findAll(Doctor.class);
+            
+            Collection<Doctor> doctors = ORM.findAll(Doctor.class, 
+                    "order by name");
             for (Doctor doctor : doctors) {
               doctorList.getItems().add(doctor);
             }
-
+            
             Collection<Patient> patients = ORM.findAll(Patient.class);
             for (Patient patient : patients) {
               patientList.getItems().add(patient);
             }
-            
+                        
             DoctorCellCallBack doctorCellCallback = new DoctorCellCallBack();
             doctorList.setCellFactory(doctorCellCallback);
 

@@ -7,6 +7,7 @@ package doctorfx;
 
 import models.Doctor;
 import models.Patient;
+import models.Treatment;
 
 /**
  *
@@ -37,6 +38,19 @@ public class Helper {
       );
     }
 
+    /*
+    public static String info(Treatment treatment) {
+      return String.format(
+          "doctor_id: %s\n"
+          + "patient_id: %s\n"
+          + "report: %s\n",
+          treatment.getDoctorId(),
+          treatment.getPatientId(),
+          treatment.getReport()
+      );
+    }
+    */
+    
     public static java.sql.Date currentDate() {
       long now = new java.util.Date().getTime();
       java.sql.Date date = new java.sql.Date(now);

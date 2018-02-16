@@ -8,38 +8,78 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane dividerPositions="0.7" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="618.0" prefWidth="456.0" stylesheets="@../css/hospital-main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="doctorfx.FXMLHospitalController">
-  <items>
-      <GridPane prefHeight="429.0" prefWidth="452.0">
+<BorderPane fx:id="borderPane" scaleShape="false" stylesheets="@../css/hospital-main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="doctorfx.FXMLHospitalController">
+   <right>
+      <VBox minHeight="0" minWidth="0" snapToPixel="false" spacing="5.0">
          <children>
-            <ListView fx:id="patientList" onMouseClicked="#patientSelect" prefHeight="379.0" prefWidth="290.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ListView fx:id="doctorList" onMouseClicked="#doctorSelect" prefHeight="330.0" prefWidth="226.0" GridPane.rowIndex="1" />
-            <Label prefHeight="21.0" prefWidth="107.0" text="Doctors">
-               <font>
-                  <Font size="12.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="10.0" />
-               </GridPane.margin>
-            </Label>
-            <Label prefHeight="21.0" prefWidth="107.0" text="Patients" GridPane.columnIndex="1">
-               <font>
-                  <Font size="12.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="10.0" />
-               </GridPane.margin>
-            </Label>
+            <Button mnemonicParsing="false" onAction="#clear" text="Clear" VBox.vgrow="SOMETIMES">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" text="Remove" />
          </children>
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints maxHeight="183.63339233398438" minHeight="0.0" prefHeight="48.226593017578125" vgrow="NEVER" />
-            <RowConstraints maxHeight="410.0" minHeight="10.0" prefHeight="361.7734069824219" vgrow="SOMETIMES" />
-         </rowConstraints>
-      </GridPane>
-      <TextArea fx:id="display" editable="false" onMouseClicked="#refocus" prefHeight="200.0" prefWidth="457.0" />
-  </items>
-</SplitPane>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
+   </right>
+   <center>
+      <SplitPane dividerPositions="0.6" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" BorderPane.alignment="CENTER">
+         <items>
+            <GridPane prefHeight="172.0" prefWidth="221.0">
+               <children>
+                  <ListView fx:id="patientList" onMouseClicked="#patientSelect" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ListView fx:id="doctorList" onMouseClicked="#doctorSelect" GridPane.rowIndex="1" />
+                  <Label prefHeight="21.0" prefWidth="107.0" text="Doctors">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label prefHeight="21.0" prefWidth="107.0" text="Patients" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </Label>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="183.63339233398438" minHeight="0.0" prefHeight="41.0" vgrow="NEVER" />
+                  <RowConstraints maxHeight="410.0" minHeight="10.0" prefHeight="210.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+            <TextArea fx:id="display" editable="false" onMouseClicked="#refocus" />
+         </items>
+      </SplitPane>
+   </center>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>
