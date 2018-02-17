@@ -24,15 +24,17 @@ public final class Doctor extends Model {
  
   private int id = 0;
   private String name;
+  private int specialty_Id;
   private String specialty;
  
   Doctor() {}
  
-  public Doctor(String name, String specialty) {
+  public Doctor(String name, int specialty_Id, String specialty) {
     this.name = name;
+    this.specialty_Id = specialty_Id;
     this.specialty = specialty;
   }
- 
+  
  @Override
   public int getId() {
     return id;
@@ -46,6 +48,16 @@ public final class Doctor extends Model {
     this.name = name;
   }
   
+  public int getSpecialty_Id()
+  {
+    return specialty_Id;
+  }
+  
+  public void setSpecialty_Id(int specialty_Id)
+  {
+      this.specialty_Id = specialty_Id;
+  }
+    
   public String getSpecialty()
   {
     return specialty;
@@ -55,13 +67,14 @@ public final class Doctor extends Model {
   {
       this.specialty = specialty;
   }
+  
 
   
  @Override
   void load(ResultSet rs) throws SQLException {
     id = rs.getInt("id");
     name = rs.getString("name");
-    specialty = rs.getString("specialty_id");
+    specialty_Id = rs.getInt("specialty_id");
   }
  
  @Override
@@ -72,7 +85,7 @@ public final class Doctor extends Model {
     PreparedStatement st = cx.prepareStatement(sql);
     int i = 0;
     st.setString(++i, name);
-    st.setString(++i, specialty);
+    st.setInt(++i, specialty_Id);
     st.executeUpdate();
     id = ORM.getMaxId(TABLE);
   }
@@ -85,14 +98,14 @@ public final class Doctor extends Model {
     PreparedStatement st = cx.prepareStatement(sql);
     int i = 0;
     st.setString(++i, name);
-    st.setString(++i, specialty);
+    st.setInt(++i, specialty_Id);
     st.setInt(++i, id);
     st.executeUpdate();
   }
  
   @Override
   public String toString() {
-    return String.format("(%s,%s,%s)", id, name, specialty);
+    return String.format("(%s,%s,%s)", id, name, specialty_Id);
   }
 
 }

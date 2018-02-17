@@ -8,16 +8,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="borderPane" scaleShape="false" stylesheets="@../css/hospital-main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="doctorfx.FXMLHospitalController">
+<BorderPane fx:id="borderPane" scaleShape="false" stylesheets="@../css/hospital-main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="doctorfx.HospitalController">
    <right>
       <VBox minHeight="0" minWidth="0" snapToPixel="false" spacing="5.0">
          <children>
+            <Button mnemonicParsing="false" onAction="#treatmentReport" text="Report" />
+            <Button mnemonicParsing="false" onAction="#patientLink" text="Link" />
+            <Button mnemonicParsing="false" onAction="#patientUnlink" text="Unlink" />
             <Button mnemonicParsing="false" onAction="#clear" text="Clear" VBox.vgrow="SOMETIMES">
                <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" text="Remove" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -64,21 +66,29 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu mnemonicParsing="false" text="Doctors">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#addDoctor" text="Add" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
+          <Menu mnemonicParsing="false" text="Patients">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" onAction="#patientsByAdmitted" text="Order By Admitted Date" />
+                  <MenuItem mnemonicParsing="false" onAction="#patientsByName" text="Order By Name" />
+                  <MenuItem mnemonicParsing="false" onAction="#addPatient" text="Add" />
+                  <MenuItem mnemonicParsing="false" onAction="#removePatient" text="Remove" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
+            <Menu mnemonicParsing="false" text="Treatment">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#modifyReport" text="Modify Report" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Specialty">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#addSpeciality" text="Add" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>

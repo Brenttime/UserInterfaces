@@ -7,6 +7,7 @@ package models;
 
     
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,11 +23,11 @@ public final class Patient extends Model{
  
   private int id = 0;
   private String name;
-  private String admitted;
+  private Date admitted;
  
   Patient() {}
  
-  public Patient(String name, String admitted) {
+  public Patient(String name, Date admitted) {
     this.name = name;
     this.admitted = admitted;
   }
@@ -40,7 +41,7 @@ public final class Patient extends Model{
     return name;
   }
  
-  public String getAdmitted() {
+  public Date getAdmitted() {
     return admitted;
   }
  
@@ -48,7 +49,7 @@ public final class Patient extends Model{
     this.name = name;
   }
  
-  public void setAdmitted(String admitted) {
+  public void setAdmitted(Date admitted) {
     this.admitted = admitted;
   }
  
@@ -56,7 +57,7 @@ public final class Patient extends Model{
   void load(ResultSet rs) throws SQLException {
     id = rs.getInt("id");
     name = rs.getString("name");
-    admitted = rs.getString("admitted");
+    admitted = rs.getDate("admitted");
   }
  
   @Override
@@ -67,7 +68,7 @@ public final class Patient extends Model{
     PreparedStatement st = cx.prepareStatement(sql);
     int i = 0;
     st.setString(++i, name);
-    st.setString(++i, admitted);
+    st.setDate(++i, admitted);
     st.executeUpdate();
     id = ORM.getMaxId(TABLE);
   }
@@ -81,7 +82,7 @@ public final class Patient extends Model{
     PreparedStatement st = cx.prepareStatement(sql);
     int i = 0;
     st.setString(++i, name);
-    st.setString(++i, admitted);
+    st.setDate(++i, admitted);
     st.setInt(++i, id);
     st.executeUpdate();
   }

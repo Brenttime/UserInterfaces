@@ -25,10 +25,11 @@ public class Treatment extends Model{
   
   // must have default constructor accessible to the package
   Treatment() {}
- 
-  public Treatment(Patient patient, Doctor doctor) {
+
+  public Treatment(Patient patient, Doctor doctor, String report) {
     this.patient_id = patient.getId();
     this.doctor_id = doctor.getId();
+    this.report = report;
   }
   
   @Override
@@ -74,11 +75,13 @@ public class Treatment extends Model{
     }
   }
 
+
   @Override
   void load(ResultSet rs) throws SQLException {
     id = rs.getInt("id");
     doctor_id = rs.getInt("doctor_id");
     patient_id = rs.getInt("patient_id");
+    report = rs.getString("report");
   }
  
   @Override
