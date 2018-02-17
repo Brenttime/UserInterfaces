@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,6 +22,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import models.DBProps;
 import models.Treatment;
 import models.ORM;
@@ -147,7 +149,7 @@ public class HospitalController implements Initializable {
             Doctor doctor = doctorList.getSelectionModel().getSelectedItem();
             
             if(patient == null || doctor == null) {
-                throw new ExpectedException("must select doctor and patient");
+                throw new ExpectedException("must select a doctor and a patient");
             }
             
             Treatment treatment = ORM.findOne(Treatment.class, 
@@ -156,7 +158,7 @@ public class HospitalController implements Initializable {
 
             if(treatment == null)
             {
-                throw new ExpectedException("patient does not have doctor");
+                throw new ExpectedException("patient does not have doctor "+ doctor.getName());
             }
 
             display.setText(Helper.info(treatment));
@@ -464,12 +466,120 @@ public class HospitalController implements Initializable {
 
     @FXML
     private void addSpeciality(Event event) {
-      System.out.println("addSpeciality");
+        try {
+          // get fxmlLoader
+          URL fxml = getClass().getResource("AddSpecialty.fxml");
+          FXMLLoader fxmlLoader = new FXMLLoader(fxml);
+          fxmlLoader.load();
+
+          // get scene from loader
+          Scene scene = new Scene(fxmlLoader.getRoot());
+
+          // create a stage for the scene
+          Stage dialogStage = new Stage();            
+          dialogStage.setScene(scene);
+
+          // specify dialog title
+          dialogStage.setTitle("Add a Specialty");
+
+          // make it block the application
+          dialogStage.initModality(Modality.APPLICATION_MODAL);
+
+          // invoke the dialog
+          dialogStage.show();
+          //===============================================   
+
+          // get controller from fxmlLoader
+          AddSpecialtyController dialogController = fxmlLoader.getController();
+
+          // pass the LibraryController to the dialog controller
+          dialogController.setMainController(this);
+        }
+        catch (IOException ex) {
+          ex.printStackTrace(System.err);
+          System.exit(1);
+        }
     }
     
     @FXML
     private void modifyReport(Event event) {
-      System.out.println("modifyReport");    
+        try {
+            
+            Patient patient = patientList.getSelectionModel().getSelectedItem();
+            Doctor doctor = doctorList.getSelectionModel().getSelectedItem();
+            
+            if(patient == null || doctor == null) {
+                throw new ExpectedException("must select a doctor and a patient");
+            }
+            
+            Treatment treatment = ORM.findOne(Treatment.class, 
+                "where patient_id=? and doctor_id=?", 
+                new Object[]{patient.getId(), doctor.getId()});
+
+            if(treatment == null)
+            {
+                throw new ExpectedException("patient does not have doctor "+ doctor.getName());
+            }
+            
+            // get fxmlLoader
+            URL fxml = getClass().getResource("ModifyReport.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(fxml);
+            fxmlLoader.load();
+
+            // get scene from loader
+            Scene scene = new Scene(fxmlLoader.getRoot());
+
+            // create a stage for the scene
+            Stage dialogStage = new Stage();            
+            dialogStage.setScene(scene);
+
+            // specify dialog title
+            dialogStage.setTitle("Add a Specialty");
+
+            // make it block the application
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+
+            // invoke the dialog
+            dialogStage.show();
+            //===============================================   
+
+            // get controller from fxmlLoader
+            ModifyReportController dialogController = fxmlLoader.getController();
+
+            // pass the LibraryController to the dialog controller
+            dialogController.setMainController(this);
+            
+            
+            // query window closing
+            dialogStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+              @Override
+              public void handle(WindowEvent event) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Are you sure you want to exit this dialog?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() != ButtonType.OK) {
+                  event.consume();
+                }
+              }
+            });
+
+            // set book to be modified in dialog
+            dialogController.setTreatmentToModify(treatment);            
+            
+        }
+        catch (ExpectedException ex) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText(ex.getMessage());
+            alert.show();
+            if (lastFocused != null) {
+              lastFocused.requestFocus();
+            }
+        }
+        catch(Exception ex)
+        {
+          ex.printStackTrace(System.err);
+          System.exit(1);
+        }
     }
     
     @Override
