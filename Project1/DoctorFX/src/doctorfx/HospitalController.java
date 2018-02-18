@@ -270,10 +270,13 @@ public class HospitalController implements Initializable {
             treatment = new Treatment(patient, doctor, "");
             ORM.store(treatment);
             ORM.store(doctor);
-            patientTreatmentIds.add(doctor.getId());
-            doctorList.refresh();
             
-            lastFocused.requestFocus();    // there must be a lastFocused
+            patientTreatmentIds.add(doctor.getId());
+            doctorTreatmentIds.add(patient.getId());
+            doctorList.refresh();
+            patientList.refresh();
+            
+            //lastFocused.requestFocus();    // there must be a lastFocused
             if (lastFocused == doctorList) {
               display.setText(Helper.info(doctor));
             }
@@ -318,7 +321,9 @@ public class HospitalController implements Initializable {
 
             // reset booklist
             patientTreatmentIds.remove(doctor.getId());
+            doctorTreatmentIds.remove(patient.getId());
             doctorList.refresh();
+            patientList.refresh();
             
             lastFocused.requestFocus();    // there must be a lastFocused
             if (lastFocused == doctorList) {
