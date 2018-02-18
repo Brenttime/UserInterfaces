@@ -183,8 +183,13 @@ public class HospitalController implements Initializable {
     @FXML
     private void clear(Event event)
     {
+        patientList.getSelectionModel().clearSelection();
+        doctorList.getSelectionModel().clearSelection();
         patientTreatmentIds.clear();
         doctorTreatmentIds.clear();
+        display.clear();
+        lastFocused.requestFocus();
+        
         patientList.refresh();
         doctorList.refresh();
     }
@@ -341,16 +346,7 @@ public class HospitalController implements Initializable {
             if (patient == null) {
               throw new ExpectedException("must select patient");
             }
-
-            // find all the books borrowed by the user
-            Collection<Treatment> treatments = ORM.findAll(Treatment.class,
-                "where patient_id=?", new Object[]{patient.getId()});
-
-            // cannot remove, still has borrows
-            if (!treatments.isEmpty()) {
-              throw new ExpectedException("patient must be removed from treatement");
-            }
-
+            
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setContentText("Are you sure?");
             Optional<ButtonType> result = alert.showAndWait();
@@ -358,6 +354,14 @@ public class HospitalController implements Initializable {
               return;
             }
 
+            // Get treatments and remove them
+            Collection<Treatment> treatments = ORM.findAll(Treatment.class,
+                "where patient_id=?", new Object[]{patient.getId()});
+            for(Treatment treatment : treatments)
+            {
+                ORM.remove(treatment);
+            }
+                        
             // remove from user table
             ORM.remove(patient);
 
