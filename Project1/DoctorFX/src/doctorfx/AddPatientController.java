@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * Userinterface
+ * AddPatientController
  */
 package doctorfx;
 
@@ -23,9 +24,9 @@ import models.Patient;
 import models.Specialty;
 
 /**
- * FXML Controller class
+ * AddPatientController is a controller class for the Add Patient Panel
  *
- * @author Brenttime
+ * @author Brent Turner
  */
 public class AddPatientController implements Initializable {
 
@@ -36,6 +37,7 @@ public class AddPatientController implements Initializable {
       this.mainController = mainController;
     }
     
+    //Used for admitted date
     public static java.sql.Date currentDate() {
       long now = new java.util.Date().getTime();
       Date date = new Date(now);
@@ -48,7 +50,7 @@ public class AddPatientController implements Initializable {
     @FXML
     private TextField firstNameField;
 
-    
+    //Add button handler
     @FXML
     private void add(Event event) {
         try {
@@ -82,11 +84,11 @@ public class AddPatientController implements Initializable {
             Patient newPatient = new Patient(name, admitted);
             ORM.store(newPatient);
 
-            // access the features of LibraryController
+            // access the features of hosptialController
             ListView<Patient> patientList = mainController.getPatientList();
             TextArea display = mainController.getDisplay();
 
-            // reload booklist from database
+            // reload patientlist from database
             patientList.getItems().clear();
             Collection<Patient> patients = ORM.findAll(Patient.class, 
                     "order by name");
@@ -94,16 +96,17 @@ public class AddPatientController implements Initializable {
                 patientList.getItems().add(patient);
             }
 
-            // select in list and scroll to added book
+            // select in list and scroll to added patient
             patientList.getSelectionModel().select(newPatient);
             patientList.scrollTo(newPatient);
 
             patientList.requestFocus();
             mainController.setLastFocused(patientList);
 
-            // set text display to added book
+            // set text display to added patient
             display.setText(Helper.info(newPatient));
 
+            //all done so hide the panel
             ((Button) event.getSource()).getScene().getWindow().hide();
         }
         catch (ExpectedException ex) {
@@ -117,6 +120,7 @@ public class AddPatientController implements Initializable {
         }
     }
 
+    //if user cancels the add
     @FXML
     private void cancel(Event event) {
         ((Button)event.getSource()).getScene().getWindow().hide();
@@ -128,7 +132,7 @@ public class AddPatientController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        //no initialize code needed
     }    
     
     

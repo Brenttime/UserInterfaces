@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * User Interfaces
+ * Doctor class
  */
 package models;
 
@@ -15,8 +16,8 @@ import java.util.Set;
 import static models.ORM.connection;
 
 /**
- *
- * @author brent
+ * Doctor object template
+ * @author brent turner
  */
 public final class Doctor extends Model {
     
@@ -24,11 +25,17 @@ public final class Doctor extends Model {
  
   private int id = 0;
   private String name;
+  
+  //The specialty id that is found in the sql table
   private int specialty_Id;
+  
+  //The associated specialty with the specialty_id assocaited with this doctor
   private String specialty;
  
+  //Empty Contructor
   Doctor() {}
  
+  //Constructor
   public Doctor(String name, int specialty_Id, String specialty) {
     this.name = name;
     this.specialty_Id = specialty_Id;
@@ -69,6 +76,7 @@ public final class Doctor extends Model {
   }
   
 
+ //ORM Functions below
   
  @Override
   void load(ResultSet rs) throws SQLException {

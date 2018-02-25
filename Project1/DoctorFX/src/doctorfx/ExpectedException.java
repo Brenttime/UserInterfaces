@@ -1,13 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ *
+ * UserInterfaces
+ * ExpectedException
  */
 package doctorfx;
 
 /**
- *
- * @author Brenttime
+ * This class is meant to handle exceptions we intend to happen if the user
+ * attempts to do something "wrong." It interrupts the action rather than
+ * crashing the program.
+ * 
+ * @author Brent Turner
  */
 class ExpectedException extends Exception {
   ExpectedException(String message) {

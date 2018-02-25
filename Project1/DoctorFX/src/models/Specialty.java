@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * User Interfaces
+ * Specialty class
  */
 package models;
 
@@ -12,8 +13,8 @@ import java.sql.SQLException;
 import static models.Doctor.TABLE;
 
 /**
- *
- * @author Brenttime
+ * Specialty object template
+ * @author brent turner
  */
 public class Specialty extends Model{
     public static final String TABLE = "specialty";
@@ -46,6 +47,7 @@ public class Specialty extends Model{
       name = rs.getString("name");
     }
 
+   //ORM functions below
    @Override
     void insert() throws SQLException {
       Connection cx = ORM.connection();

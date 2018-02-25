@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * Userinterface
+ * DoctorCellCallBack
  */
 package doctorfx;
 
@@ -12,8 +13,8 @@ import javafx.util.Callback;
 import models.Doctor;
 
 /**
- *
- * @author brent
+ * Provides a more dynamic way of getting the objects text, as opposed to the "toString" method
+ * @author brent turner
  */
 public class DoctorCellCallBack implements Callback<ListView<Doctor>, ListCell<Doctor>> {
   

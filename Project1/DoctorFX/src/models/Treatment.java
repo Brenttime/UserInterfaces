@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * User Interfaces
+ * Template class
  */
 package models;
 
@@ -11,8 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
- * @author brent
+ * Treatment class that will be the template for all treatment objects
+ * @author brent turner
  */
 public class Treatment extends Model{
   
@@ -21,6 +22,8 @@ public class Treatment extends Model{
   private int id = 0;
   private int patient_id;
   private int doctor_id;
+  
+  //The report of treatment for the patient from the doctor
   private String report;
   
   // must have default constructor accessible to the package
@@ -75,6 +78,7 @@ public class Treatment extends Model{
     }
   }
 
+  //ORM functions below
 
   @Override
   void load(ResultSet rs) throws SQLException {

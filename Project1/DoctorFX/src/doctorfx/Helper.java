@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * UserInterfaces
+ * Helper
  */
 package doctorfx;
 
@@ -14,12 +15,13 @@ import models.Specialty;
 import models.Treatment;
 
 /**
- *
- * @author brent
+ * This class is meant to display information in the text area of Hospital.fxml
+ * 
+ * @author brent turner
  */
 public class Helper {
  
-    
+    //Doctor info
     public static String info(Doctor doctor) {
 
         return String.format(
@@ -31,7 +33,7 @@ public class Helper {
             doctor.getSpecialty()
         );
      }
- 
+    //Patient info
     public static String info(Patient patient) {
       return String.format(
           "id: %s\n"
@@ -43,14 +45,14 @@ public class Helper {
       );
     }
 
-    
+    //treatment report info
     public static String info(Treatment treatment) {
       return String.format(
           treatment.getReport()
       );
     }
     
-   
+   //date info
     public static java.sql.Date currentDate() {
       long now = new java.util.Date().getTime();
       java.sql.Date date = new java.sql.Date(now);

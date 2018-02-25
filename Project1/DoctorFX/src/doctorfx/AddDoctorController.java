@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * Userinterface
+ * AddDoctorController
  */
 package doctorfx;
 
@@ -23,9 +24,9 @@ import models.Patient;
 import models.Specialty;
 
 /**
- * FXML Controller class
+ * AddDoctorController is a controller class for the Add Doctor Panel
  *
- * @author Brenttime
+ * @author Brent Turner
  */
 public class AddDoctorController implements Initializable {
 
@@ -44,6 +45,9 @@ public class AddDoctorController implements Initializable {
     @FXML
     private ListView<String> specialtySelection;
 
+    /*
+    * When user hits the add button run this
+    */
     @FXML
     private void add(Event event) {
         try {
@@ -81,11 +85,11 @@ public class AddDoctorController implements Initializable {
             Doctor newDoctor = new Doctor(name, specialties.getId(), specialty);
             ORM.store(newDoctor);
 
-            // access the features of LibraryController
+            // access the features of main hosptialController
             ListView<Doctor> doctorList = mainController.getDoctorList();
             TextArea display = mainController.getDisplay();
 
-            // reload booklist from database
+            // reload doctorlist from database
             doctorList.getItems().clear();
             Collection<Doctor> doctors = ORM.findAll(Doctor.class,
                     "order by name");
@@ -98,16 +102,17 @@ public class AddDoctorController implements Initializable {
                 doctor.setSpecialty(speciality.getName());
             }
 
-            // select in list and scroll to added book
+            // select in list and scroll to added doctor
             doctorList.getSelectionModel().select(newDoctor);
             doctorList.scrollTo(newDoctor);
 
             doctorList.requestFocus();
             mainController.setLastFocused(doctorList);
 
-            // set text display to added book
+            // set text display to added doctor
             display.setText(Helper.info(newDoctor));
-
+            
+            //All done now hide panel
             ((Button) event.getSource()).getScene().getWindow().hide();
         }
         catch (ExpectedException ex) {
@@ -120,7 +125,7 @@ public class AddDoctorController implements Initializable {
           System.exit(1);
         }
     }
-
+    //In case user cancels the add
     @FXML
     private void cancel(Event event) {
         ((Button)event.getSource()).getScene().getWindow().hide();
@@ -133,6 +138,7 @@ public class AddDoctorController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try{
+            //Get all current specialties
             Collection<Specialty> specialties = ORM.findAll(Specialty.class);
             for (Specialty specialty : specialties) {
                 specialtySelection.getItems().add(specialty.getName());

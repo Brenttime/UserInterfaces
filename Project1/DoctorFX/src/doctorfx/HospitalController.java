@@ -1,3 +1,9 @@
+/*
+ * Brent Turner
+ * 
+ * Userinterface
+ * HospitalController
+ */
 package doctorfx;
 
 import java.io.IOException;
@@ -29,8 +35,11 @@ import models.ORM;
 import models.Specialty;
 
 /**
+ * HospitalController is a controller class for the Hospital Panel. This is
+ * the general UI controller that navigates to other panels, and displays 
+ * the database information.
  *
- * @author brent
+ * @author Brent Turner
  */
 public class HospitalController implements Initializable {
     
@@ -59,11 +68,12 @@ public class HospitalController implements Initializable {
     ListView<Patient> getPatientList() {
       return patientList;
     }
-
+ 
     TextArea getDisplay() {
       return display;
     }
   
+    //user clicks on a doctor handler
     @FXML
     private void doctorSelect(Event event) {
         Doctor doctor = doctorList.getSelectionModel().getSelectedItem();
@@ -99,7 +109,8 @@ public class HospitalController implements Initializable {
           System.exit(1);
         }
     }
-
+    
+    //user clicks on a patient handler
     @FXML
     private void patientSelect(Event event) {
       try {
@@ -133,6 +144,7 @@ public class HospitalController implements Initializable {
       }
     }
     
+    //focus reset method
     @FXML
     private void refocus(Event event) {
       if (lastFocused != null) {
@@ -140,6 +152,7 @@ public class HospitalController implements Initializable {
       }
     }
     
+    //used to display the report for a patient doctor combo
     @FXML
     private void treatmentReport(Event event)
     {
@@ -148,6 +161,7 @@ public class HospitalController implements Initializable {
             Patient patient = patientList.getSelectionModel().getSelectedItem();
             Doctor doctor = doctorList.getSelectionModel().getSelectedItem();
             
+            //Ensure user selects both a patient and a doctor
             if(patient == null || doctor == null) {
                 throw new ExpectedException("must select a doctor and a patient");
             }
@@ -156,11 +170,13 @@ public class HospitalController implements Initializable {
                 "where patient_id=? and doctor_id=?", 
                 new Object[]{patient.getId(), doctor.getId()});
 
+            //Ensure the patient has the highlighted doctor
             if(treatment == null)
             {
                 throw new ExpectedException("patient does not have doctor "+ doctor.getName());
             }
-
+            
+            //treatment displays to the textarea
             display.setText(Helper.info(treatment));
 
             
@@ -180,29 +196,39 @@ public class HospitalController implements Initializable {
         }
     }
 
+    //clear button handler
     @FXML
     private void clear(Event event)
     {
+        //clear focused
         patientList.getSelectionModel().clearSelection();
         doctorList.getSelectionModel().clearSelection();
+        
+        //clear highlights
         patientTreatmentIds.clear();
         doctorTreatmentIds.clear();
         display.clear();
+        
+        //get current focus
         lastFocused.requestFocus();
         
+        //refresh the lists
         patientList.refresh();
         doctorList.refresh();
     }
     
+    //Handle reorder patients by name selection
     @FXML
     private void patientsByName(Event event)
     {
         try{
-            
+            //clear list
             patientList.getItems().clear();
             
             Collection<Patient> patients = ORM.findAll(Patient.class,
-                "order by name");
+                "order by name"); //where sql searches by name
+            
+            //reinitialize items on list
             for (Patient patient : patients) {
               patientList.getItems().add(patient);
             }
@@ -215,13 +241,18 @@ public class HospitalController implements Initializable {
         }
     }
     
+    //Handle reorder patients by date of admittance
     @FXML
     private void patientsByAdmitted(Event event)
     {
         try{
+            //Clear the list
             patientList.getItems().clear();
+            
             Collection<Patient> patients = ORM.findAll(Patient.class,
-                "order by admitted");
+                "order by admitted"); //set order via sql
+            
+            //Reinitialize the list
             for (Patient patient : patients) {
               patientList.getItems().add(patient);
             }
@@ -234,45 +265,63 @@ public class HospitalController implements Initializable {
         }
     }
     
+    //Link button handler - links patient and doctor
     @FXML
     private void patientLink(Event event)
     {
         try {
-            
+            //What is current selected in both doctor and patient lists
             Patient patient = patientList.getSelectionModel().getSelectedItem();
             Doctor doctor = doctorList.getSelectionModel().getSelectedItem();
             
+            //Ensure user selected both a doctor and patient
             if (patient == null || doctor == null) {
               throw new ExpectedException("must select doctor and patient");
             }
             
+            //Get current status of the selections
             Treatment treatment = ORM.findOne(Treatment.class, 
               "where patient_id=? and doctor_id=?", 
               new Object[]{patient.getId(), doctor.getId()}
             );
             
+            //Ensure the two are not already linked
             if (treatment != null) {
               throw new ExpectedException("user already has this doctor");
             }
             
-            Collection<Treatment> currentTreatments = ORM.findAll(Treatment.class,
+            //Get all current speicalites being treated for this patient
+            Collection<Treatment> currentTreatments = 
+                    ORM.findAll(Treatment.class,
                 "where patient_id=?", new Object[]{patient.getId()});
                         
+            /*
+             * Ensure this doctor does not have a speciality the patient 
+             * is already being treated for
+             */
             for (Treatment treatments : currentTreatments) {
                 Doctor otherDoctors = ORM.findOne(Doctor.class, 
                         "where id=?", new
                         Object[]{treatments.getDoctorId()});
                 if (doctor.getSpecialty() == otherDoctors.getSpecialty()) {
-                  throw new ExpectedException("patient already has a doctor with specialty " + doctor.getName());        
+                  throw new ExpectedException(
+                          "patient already has a doctor with specialty " + 
+                                  doctor.getName());        
                 }
             }
             
+            //Start the new treatment with a blank report
             treatment = new Treatment(patient, doctor, "");
+            
+            //store it to the database
             ORM.store(treatment);
             ORM.store(doctor);
             
+            //add the highlight to the ui
             patientTreatmentIds.add(doctor.getId());
             doctorTreatmentIds.add(patient.getId());
+            
+            //refresh the ui lists
             doctorList.refresh();
             patientList.refresh();
             
@@ -295,31 +344,36 @@ public class HospitalController implements Initializable {
           }
     }
     
+    //UnLink button handler - unlinks patient and doctor
     @FXML
     private void patientUnlink(Event event)
     {
         try {
+            //What is current selected in both doctor and patient lists
             Patient patient = patientList.getSelectionModel().getSelectedItem();
             Doctor doctor = doctorList.getSelectionModel().getSelectedItem();
+            
+             //Ensure user selected both a doctor and patient
             if (patient == null || doctor == null) {
               throw new ExpectedException("must select doctor and patient");
             }
 
-            // get the book from database
+            // get the treatment from database
             Treatment treatment = ORM.findOne(Treatment.class, 
               "where patient_id=? and doctor_id=?", 
               new Object[]{patient.getId(), doctor.getId()}
             );
             
+            //Ensure the two are not already unlinked
             if (treatment == null) {
               throw new ExpectedException("patient does not have this doctor");
             }
             
-            // remove the borrow
+            // remove the treatment
             ORM.remove(treatment);
             ORM.store(doctor);
 
-            // reset booklist
+            // reset doctorlist & patientlist
             patientTreatmentIds.remove(doctor.getId());
             doctorTreatmentIds.remove(patient.getId());
             doctorList.refresh();
@@ -344,14 +398,18 @@ public class HospitalController implements Initializable {
           }
     }
     
+    //Remove patient handler
     @FXML
     private void removePatient(Event event) {
         try {
             Patient patient = patientList.getSelectionModel().getSelectedItem();
+            
+            //ensure a patient is selected
             if (patient == null) {
               throw new ExpectedException("must select patient");
             }
             
+            //see if the user is sure they would like to delete a user
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setContentText("Are you sure?");
             Optional<ButtonType> result = alert.showAndWait();
@@ -367,7 +425,7 @@ public class HospitalController implements Initializable {
                 ORM.remove(treatment);
             }
                         
-            // remove from user table
+            // remove from patient table
             ORM.remove(patient);
 
             // remove from list
@@ -393,10 +451,10 @@ public class HospitalController implements Initializable {
         }
     }
 
+    //add patient handler
     @FXML
     private void addPatient(Event event) {
         try {
-          //======================== The absolutely essential part
           // get fxmlLoader
           URL fxml = getClass().getResource("AddPatient.fxml");
           FXMLLoader fxmlLoader = new FXMLLoader(fxml);
@@ -409,7 +467,6 @@ public class HospitalController implements Initializable {
           Stage dialogStage = new Stage();            
           dialogStage.setScene(scene);
 
-          //dialogStage.setHeight(250);
 
           // specify dialog title
           dialogStage.setTitle("Add a Patient");
@@ -424,7 +481,7 @@ public class HospitalController implements Initializable {
           // get controller from fxmlLoader
           AddPatientController dialogController = fxmlLoader.getController();
 
-          // pass the LibraryController to the dialog controller
+          // pass the hospitalController to the dialog controller
           dialogController.setMainController(this);
         }
         catch (IOException ex) {
@@ -433,10 +490,10 @@ public class HospitalController implements Initializable {
         }
     }
 
+    //add doctor handler
     @FXML
     private void addDoctor(Event event) {
         try {
-          //======================== The absolutely essential part
           // get fxmlLoader
           URL fxml = getClass().getResource("AddDoctor.fxml");
           FXMLLoader fxmlLoader = new FXMLLoader(fxml);
@@ -464,7 +521,7 @@ public class HospitalController implements Initializable {
           // get controller from fxmlLoader
           AddDoctorController dialogController = fxmlLoader.getController();
 
-          // pass the LibraryController to the dialog controller
+          // pass the HospitalController to the dialog controller
           dialogController.setMainController(this);
         }
         catch (IOException ex) {
@@ -473,6 +530,7 @@ public class HospitalController implements Initializable {
         }
     }
 
+    //add a specialty handler
     @FXML
     private void addSpeciality(Event event) {
         try {
@@ -501,7 +559,7 @@ public class HospitalController implements Initializable {
           // get controller from fxmlLoader
           AddSpecialtyController dialogController = fxmlLoader.getController();
 
-          // pass the LibraryController to the dialog controller
+          // pass the HospitalController to the dialog controller
           dialogController.setMainController(this);
         }
         catch (IOException ex) {
@@ -510,6 +568,7 @@ public class HospitalController implements Initializable {
         }
     }
     
+    //modify report handler
     @FXML
     private void modifyReport(Event event) {
         try {
@@ -517,6 +576,7 @@ public class HospitalController implements Initializable {
             Patient patient = patientList.getSelectionModel().getSelectedItem();
             Doctor doctor = doctorList.getSelectionModel().getSelectedItem();
             
+            //Ensure both a patient and doctor are selected
             if(patient == null || doctor == null) {
                 throw new ExpectedException("must select a doctor and a patient");
             }
@@ -524,7 +584,8 @@ public class HospitalController implements Initializable {
             Treatment treatment = ORM.findOne(Treatment.class, 
                 "where patient_id=? and doctor_id=?", 
                 new Object[]{patient.getId(), doctor.getId()});
-
+            
+            //make sure their exists a treatment between the selections
             if(treatment == null)
             {
                 throw new ExpectedException("patient does not have doctor "+ doctor.getName());
@@ -555,7 +616,7 @@ public class HospitalController implements Initializable {
             // get controller from fxmlLoader
             ModifyReportController dialogController = fxmlLoader.getController();
 
-            // pass the LibraryController to the dialog controller
+            // pass the HospitalController to the dialog controller
             dialogController.setMainController(this);
             
             
@@ -572,7 +633,7 @@ public class HospitalController implements Initializable {
               }
             });
 
-            // set book to be modified in dialog
+            // set doctor to be modified in dialog
             dialogController.setTreatmentToModify(treatment);            
             
         }
@@ -599,6 +660,8 @@ public class HospitalController implements Initializable {
             
             Collection<Doctor> doctors = ORM.findAll(Doctor.class, 
                     "order by name");
+            
+            //add initial database status to the ui
             for (Doctor doctor : doctors) {
                 doctorList.getItems().add(doctor);
                 
@@ -610,16 +673,20 @@ public class HospitalController implements Initializable {
             
             Collection<Patient> patients = ORM.findAll(Patient.class,
                     "order by name");
+            //add initial database status to the ui
             for (Patient patient : patients) {
               patientList.getItems().add(patient);
             }
-                        
+            
+            //display the names of the objects on doctor list
             DoctorCellCallBack doctorCellCallback = new DoctorCellCallBack();
             doctorList.setCellFactory(doctorCellCallback);
 
+            //display the names of the objects on patient list
             PatientCellCallBack patientCellCallback = new PatientCellCallBack();
             patientList.setCellFactory(patientCellCallback);  
             
+            //set up the highlights for linked treatments
             doctorCellCallback.setHightlightedIds( patientTreatmentIds );
             patientCellCallback.setHightlightedIds( doctorTreatmentIds );
         }

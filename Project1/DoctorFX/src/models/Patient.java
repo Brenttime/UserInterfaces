@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * User Interfaces
+ * Patient class
  */
 package models;
 
@@ -14,8 +15,8 @@ import java.sql.SQLException;
  
 
 /**
- *
- * @author brent
+ * Patient object template
+ * @author brent turner
  */
 public final class Patient extends Model{
  
@@ -25,6 +26,7 @@ public final class Patient extends Model{
   private String name;
   private Date admitted;
  
+  //Empty Constructor
   Patient() {}
  
   public Patient(String name, Date admitted) {

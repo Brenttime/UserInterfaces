@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * Userinterface
+ * PatientCellCallBack
  */
 package doctorfx;
 
@@ -13,8 +14,8 @@ import models.Doctor;
 import models.Patient;
 
 /**
- *
- * @author brent
+ * Provides a more dynamic way of getting the objects text, as opposed to the "toString" method
+ * @author brent turner
  */
 public class PatientCellCallBack implements Callback<ListView<Patient>, ListCell<Patient>> {
     private Collection<Integer> highlightedIds = null;

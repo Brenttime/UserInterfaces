@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * Userinterface
+ * DoctorFX
  */
 package doctorfx;
 
@@ -13,20 +14,25 @@ import javafx.stage.Stage;
 import models.DBProps;
 
 /**
- *
- * @author brent
+ * This class just initializes the main GUI
+ * 
+ * @author brent turner
  */
 public class DoctorFX extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
+        
+        //the main gui window is loaded
         Parent root = FXMLLoader.load(getClass().getResource("Hospital.fxml"));
         
         Scene scene = new Scene(root);
         
+        //defualt resolution of the application
         stage.setWidth(700);
         stage.setHeight(500);
         
+        //set title
         stage.setTitle("Doctors & Patients - " + DBProps.which); 
     
         stage.setScene(scene);

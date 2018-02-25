@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * Userinterface
+ * ModifyTreatmentController
  */
 package doctorfx;
 
@@ -24,9 +25,10 @@ import models.Patient;
 import models.Treatment;
 
 /**
- * FXML Controller class
+ * ModifyTreatmentController is a controller class for the modify treatment 
+ * Panel.
  *
- * @author Brenttime
+ * @author Brent Turner
  */
 public class ModifyReportController implements Initializable {
 
@@ -42,7 +44,7 @@ public class ModifyReportController implements Initializable {
     void setTreatmentToModify(Treatment treatment) {
         this.treatmentToModify = treatment;
 
-        // initialize fields from book to modify
+        // initialize fields from doctor & patient to modify
         try{
             Doctor doctor = ORM.findOne(Doctor.class, "where id=?",
                     new Object[]{treatment.getDoctorId()});
@@ -57,11 +59,13 @@ public class ModifyReportController implements Initializable {
           System.exit(1);
         }
         
+        //Fill the area with the current report
         if(treatment.getReport() != null) {
            reportArea.setText(treatment.getReport());
         }
     }
     
+    //see reportChanged()
     private Boolean reportModified = false;
     
     @FXML
@@ -73,6 +77,7 @@ public class ModifyReportController implements Initializable {
     @FXML
     private TextArea reportArea;
     
+    //Modify button handler
     @FXML
     private void modify(Event event)
     {
@@ -94,14 +99,21 @@ public class ModifyReportController implements Initializable {
         }
     }
     
+    /*
+     * If the user attempts to modify the report. we will later handle if 
+     * they attempt to cancel after modification
+     */
     @FXML
     private void reportChanged(Event event)
     {
         this.reportModified = true;
     }
     
+    //Cancel button handler
     @FXML
     private void cancel(Event event) {
+        
+        //Did the user attempt to modify the report at all?
         if(reportModified == true) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setContentText("Are you sure you want to exit this dialog?");
@@ -126,7 +138,7 @@ public class ModifyReportController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        //no initialize needed
 
     }
 }

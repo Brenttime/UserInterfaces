@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Brent Turner
+ * 
+ * Userinterface
+ * AddSpecialtyController
  */
 package doctorfx;
 
@@ -21,9 +22,9 @@ import models.ORM;
 import models.Specialty;
 
 /**
- * FXML Controller class
+ * AddSpecialtyController is a controller class for the Add Specialty Panel
  *
- * @author Brenttime
+ * @author Brent Turner
  */
 public class AddSpecialtyController implements Initializable {
 
@@ -39,6 +40,7 @@ public class AddSpecialtyController implements Initializable {
     @FXML
     private TextField newSpecialtyField;
     
+    //Add button handler
     @FXML
     private void add(Event event) {
         try {
@@ -62,7 +64,8 @@ public class AddSpecialtyController implements Initializable {
             // put it into the database
             Specialty newSpecialty = new Specialty(newSpecialtyItem);
             ORM.store(newSpecialty);
-
+            
+            //All done hide panel
             ((Button) event.getSource()).getScene().getWindow().hide();
         }
         catch (ExpectedException ex) {
@@ -75,7 +78,7 @@ public class AddSpecialtyController implements Initializable {
           System.exit(1);
         }
     }
-
+    //cancel button handler
     @FXML
     private void cancel(Event event) {
         ((Button)event.getSource()).getScene().getWindow().hide();
@@ -87,6 +90,7 @@ public class AddSpecialtyController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try{
+            //grab all current specialties from the database
             Collection<Specialty> specialties = ORM.findAll(Specialty.class);
             for (Specialty specialty : specialties) {
                 existingSpecialtiesArea.appendText(specialty.getName() + "\n");
