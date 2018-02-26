@@ -30,7 +30,7 @@ public class Helper {
             + "Specialty: %s\n",
             doctor.getId(),
             doctor.getName(),
-            doctor.getSpecialty()
+            doctor.getSpecialty().getName()  //access the object's name getter
         );
      }
     //Patient info

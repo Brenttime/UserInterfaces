@@ -6,6 +6,7 @@
  */
 package models;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,8 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static models.ORM.connection;
 
 /**
@@ -26,19 +29,15 @@ public final class Doctor extends Model {
   private int id = 0;
   private String name;
   
-  //The specialty id that is found in the sql table
-  private int specialty_Id;
-  
   //The associated specialty with the specialty_id assocaited with this doctor
-  private String specialty;
+  private Specialty specialty;
  
   //Empty Contructor
   Doctor() {}
  
   //Constructor
-  public Doctor(String name, int specialty_Id, String specialty) {
+  public Doctor(String name, Specialty specialty) {
     this.name = name;
-    this.specialty_Id = specialty_Id;
     this.specialty = specialty;
   }
   
@@ -54,35 +53,31 @@ public final class Doctor extends Model {
   public void setName(String name) {
     this.name = name;
   }
-  
-  public int getSpecialty_Id()
-  {
-    return specialty_Id;
-  }
-  
-  public void setSpecialty_Id(int specialty_Id)
-  {
-      this.specialty_Id = specialty_Id;
-  }
     
-  public String getSpecialty()
+  public Specialty getSpecialty()
   {
     return specialty;
   }
   
-  public void setSpecialty(String specialty)
+  public void setSpecialty(Specialty specialty)
   {
       this.specialty = specialty;
   }
   
 
  //ORM Functions below
-  
  @Override
   void load(ResultSet rs) throws SQLException {
     id = rs.getInt("id");
     name = rs.getString("name");
-    specialty_Id = rs.getInt("specialty_id");
+     try {
+         Specialty doctorSpecialty = ORM.findOne(Specialty.class,
+                 "where id=?", new Object[]{rs.getInt("specialty_id")});
+         specialty = doctorSpecialty;
+     } catch (Exception ex) {
+        ex.printStackTrace(System.err);
+        System.exit(1);
+     }
   }
  
  @Override
@@ -93,7 +88,7 @@ public final class Doctor extends Model {
     PreparedStatement st = cx.prepareStatement(sql);
     int i = 0;
     st.setString(++i, name);
-    st.setInt(++i, specialty_Id);
+    st.setInt(++i, specialty.getId());
     st.executeUpdate();
     id = ORM.getMaxId(TABLE);
   }
@@ -106,14 +101,14 @@ public final class Doctor extends Model {
     PreparedStatement st = cx.prepareStatement(sql);
     int i = 0;
     st.setString(++i, name);
-    st.setInt(++i, specialty_Id);
+    st.setInt(++i, specialty.getId());
     st.setInt(++i, id);
     st.executeUpdate();
   }
  
   @Override
   public String toString() {
-    return String.format("(%s,%s,%s)", id, name, specialty_Id);
+    return String.format("(%s,%s,%s)", id, name, specialty.getName());
   }
 
 }

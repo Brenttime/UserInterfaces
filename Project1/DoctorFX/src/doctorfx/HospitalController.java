@@ -664,12 +664,7 @@ public class HospitalController implements Initializable {
             //add initial database status to the ui
             for (Doctor doctor : doctors) {
                 doctorList.getItems().add(doctor);
-                
-                Specialty speciality = ORM.findOne(Specialty.class,
-                        "where id=?", new Object[]{doctor.getSpecialty_Id()});
-
-                doctor.setSpecialty(speciality.getName());
-            }
+            }            
             
             Collection<Patient> patients = ORM.findAll(Patient.class,
                     "order by name");

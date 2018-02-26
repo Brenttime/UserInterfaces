@@ -82,7 +82,7 @@ public class AddDoctorController implements Initializable {
                   "where name=?", new Object[]{specialty});
           
             // put it into the database
-            Doctor newDoctor = new Doctor(name, specialties.getId(), specialty);
+            Doctor newDoctor = new Doctor(name, specialties);
             ORM.store(newDoctor);
 
             // access the features of main hosptialController
@@ -95,11 +95,6 @@ public class AddDoctorController implements Initializable {
                     "order by name");
             for (Doctor doctor : doctors) {
                 doctorList.getItems().add(doctor);
-                
-                Specialty speciality = ORM.findOne(Specialty.class,
-                    "where id=?", new Object[]{doctor.getSpecialty_Id()});
-
-                doctor.setSpecialty(speciality.getName());
             }
 
             // select in list and scroll to added doctor
